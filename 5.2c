@@ -1,0 +1,83 @@
+import sys #constants , functions and methods for the python
+import RPi.GPIO as GPIO # Import Raspberry Pi GPIO library
+from time import sleep # Import the sleep function from the time module
+
+from PyQt5.QtWidgets import (
+    QApplication,
+    QLabel,
+    QPushButton,
+    QHBoxLayout,
+    QVBoxLayout,
+    QWidget,
+    QLayout
+)
+
+butt1 = 8
+butt2 = 10
+butt3 = 12
+
+GPIO.setup(butt1, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(butt2, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(butt3, GPIO.OUT, initial=GPIO.LOW)
+
+# 2. Create an instance of QApplication
+app = QApplication(sys.argv) 
+
+def button1_clicked() : 
+    print("1st button clicked")
+    GPIO.output(butt1, not GPIO.input(butt1))
+	GPIO.output(butt2, LOW)
+	GPIO.output(butt3, LOW)
+
+def button2_clicked() : 
+    print("2nd  button clicked")
+    GPIO.output(butt2, not GPIO.input(butt2))
+	GPIO.output(butt1, LOW)
+	GPIO.output(butt3, LOW)
+
+def button3_clicked() : 
+    print("3rd button clicked")
+    GPIO.output(butt3, not GPIO.input(butt3))  #led on and off
+	GPIO.output(butt1, LOW)
+	GPIO.output(butt2, LOW)
+
+
+
+window = QWidget()
+window.setWindowTitle("GUI APLICATION")
+layoutH = QHBoxLayout()
+layoutV = QVBoxLayout()
+
+button1= QPushButton()
+button1.setText("Red")
+
+button2 = QPushButton()
+button2.setText("Blue")
+
+button3 = QPushButton()
+button3.setText("Green")
+
+button1.setStyleSheet("background-color : red")
+button2.setStyleSheet("background-color : blue")
+button3.setStyleSheet("background-color : green")
+
+button1.clicked.connect(button1_clicked)
+button2.clicked.connect(button2_clicked)
+button3.clicked.connect(button3_clicked)
+
+
+layoutH.addWidget(button1)
+layoutH.addWidget(button2 )
+layoutH.addWidget(button3)
+
+Msg = QLabel("<h1>press button below to control led's <h1>", parent=window)
+
+layoutV.addWidget(Msg)
+layoutV.addLayout(layoutH)
+
+window.setLayout(layoutV)
+window.setGeometry(50,50,320,200)
+window.setWindowTitle("5.2 c")
+window.show()
+sys.exit(app.exec_())
+
